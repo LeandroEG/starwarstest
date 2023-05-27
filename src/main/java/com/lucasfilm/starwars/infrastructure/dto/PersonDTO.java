@@ -1,15 +1,10 @@
-package com.lucasfilm.starwars.domain;
+package com.lucasfilm.starwars.infrastructure.dto;
 
-import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "people")
-public class Person {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PersonDTO {
     private Long id;
+
     private String name;
     private String height;
     private String mass;
@@ -19,27 +14,10 @@ public class Person {
     private String birthYear;
     private String gender;
     private String homeworld;
-
-    @ElementCollection
-    @CollectionTable(name = "person_films", joinColumns = @JoinColumn(name = "person_id"))
-    @Column(name = "film")
     private List<String> films;
-
-    @ElementCollection
-    @CollectionTable(name = "person_species", joinColumns = @JoinColumn(name = "person_id"))
-    @Column(name = "species")
     private List<String> species;
-
-    @ElementCollection
-    @CollectionTable(name = "person_vehicles", joinColumns = @JoinColumn(name = "person_id"))
-    @Column(name = "vehicle")
     private List<String> vehicles;
-
-    @ElementCollection
-    @CollectionTable(name = "person_starships", joinColumns = @JoinColumn(name = "person_id"))
-    @Column(name = "starship")
     private List<String> starships;
-
     private String created;
     private String edited;
     private String url;

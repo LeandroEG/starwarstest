@@ -1,10 +1,15 @@
-package com.lucasfilm.starwars.infrastructure;
+package com.lucasfilm.starwars.infrastructure.repository;
 
 import com.lucasfilm.starwars.domain.Film;
 import com.lucasfilm.starwars.domain.Person;
 import com.lucasfilm.starwars.domain.Starship;
+import com.lucasfilm.starwars.infrastructure.mappers.FilmMapper;
+import com.lucasfilm.starwars.infrastructure.mappers.PersonMapper;
+import com.lucasfilm.starwars.infrastructure.response.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Repository
 public class StarWarsRepository {
@@ -12,14 +17,19 @@ public class StarWarsRepository {
 
     private final RestTemplate restTemplate;
 
-    public StarWarsRepository(RestTemplate restTemplate) {
+    public final FilmRepository filmRepository;
+    public final PersonRepository personRepository;
+
+    public StarWarsRepository(RestTemplate restTemplate, FilmRepository filmRepository, PersonRepository personRepository) {
         this.restTemplate = restTemplate;
+        this.filmRepository = filmRepository;
+        this.personRepository = personRepository;
     }
 
     public void importData() {
         importFilms();
         importPeople();
-        importStarships();
+        //importStarships();
     }
 
     private void importFilms() {
@@ -32,8 +42,11 @@ public class StarWarsRepository {
             for (FilmResponse filmResponse : filmsResponse.getResults()) {
                 Film film = new Film();
                 film.setTitle(filmResponse.getTitle());
-                // Guardar en la base de datos
             }
+        }
+        if(filmsResponse !=null) {
+            List<Film> listFilms = FilmMapper.mapToFilms(filmsResponse);
+            filmRepository.saveAllAndFlush(listFilms);
         }
     }
 
@@ -47,8 +60,11 @@ public class StarWarsRepository {
             for (PersonResponse personResponse : peopleResponse.getResults()) {
                 Person person = new Person();
                 person.setName(personResponse.getName());
-                // Guardar en la base de datos
             }
+        }
+        if(peopleResponse != null) {
+            List<Person> lstPerson = PersonMapper.mapToPeople(peopleResponse);
+            personRepository.saveAllAndFlush(lstPerson);
         }
     }
 
@@ -62,7 +78,6 @@ public class StarWarsRepository {
             for (StarshipResponse starshipResponse : starshipsResponse.getResults()) {
                 Starship starship = new Starship();
                 starship.setName(starshipResponse.getName());
-                // Guardar en la base de datos
             }
         }
     }

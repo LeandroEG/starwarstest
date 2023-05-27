@@ -2,7 +2,7 @@
 package com.lucasfilm.starwars.application;
 
 import com.lucasfilm.starwars.domain.Person;
-import com.lucasfilm.starwars.infrastructure.StarWarsRepository;
+import com.lucasfilm.starwars.infrastructure.repository.StarWarsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

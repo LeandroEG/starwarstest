@@ -1,4 +1,4 @@
-package com.lucasfilm.starwars.infrastructure;
+package com.lucasfilm.starwars.infrastructure.response;
 
 import java.util.List;
 

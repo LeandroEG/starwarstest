@@ -1,7 +1,6 @@
-package com.lucasfilm.starwars.infrastructure;
+package com.lucasfilm.starwars.infrastructure.response;
 
-public class PersonResponse {
-
+public class StarshipResponse {
     private String name;
 
     public String getName() {
