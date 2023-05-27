@@ -5,7 +5,9 @@ import com.lucasfilm.starwars.domain.Person;
 import com.lucasfilm.starwars.domain.Starship;
 import com.lucasfilm.starwars.infrastructure.mappers.FilmMapper;
 import com.lucasfilm.starwars.infrastructure.mappers.PersonMapper;
+import com.lucasfilm.starwars.infrastructure.mappers.StarshipMapper;
 import com.lucasfilm.starwars.infrastructure.response.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,22 +16,20 @@ import java.util.List;
 @Repository
 public class StarWarsRepository {
     private static final String STAR_WARS_BASE_URL = "https://swapi.py4e.com/api";
+    @Autowired
+    public RestTemplate restTemplate;
+    @Autowired
+    public FilmRepository filmRepository;
+    @Autowired
+    public PersonRepository personRepository;
 
-    private final RestTemplate restTemplate;
-
-    public final FilmRepository filmRepository;
-    public final PersonRepository personRepository;
-
-    public StarWarsRepository(RestTemplate restTemplate, FilmRepository filmRepository, PersonRepository personRepository) {
-        this.restTemplate = restTemplate;
-        this.filmRepository = filmRepository;
-        this.personRepository = personRepository;
-    }
+    @Autowired
+    public StarshipRepository starshipRepository;
 
     public void importData() {
         importFilms();
         importPeople();
-        //importStarships();
+        importStarships();
     }
 
     private void importFilms() {
@@ -38,13 +38,7 @@ public class StarWarsRepository {
                 FilmsResponse.class
         );
 
-        if (filmsResponse != null && filmsResponse.getResults() != null) {
-            for (FilmResponse filmResponse : filmsResponse.getResults()) {
-                Film film = new Film();
-                film.setTitle(filmResponse.getTitle());
-            }
-        }
-        if(filmsResponse !=null) {
+        if(filmsResponse !=null && filmsResponse.getResults() != null) {
             List<Film> listFilms = FilmMapper.mapToFilms(filmsResponse);
             filmRepository.saveAllAndFlush(listFilms);
         }
@@ -56,13 +50,7 @@ public class StarWarsRepository {
                 PeopleResponse.class
         );
 
-        if (peopleResponse != null && peopleResponse.getResults() != null) {
-            for (PersonResponse personResponse : peopleResponse.getResults()) {
-                Person person = new Person();
-                person.setName(personResponse.getName());
-            }
-        }
-        if(peopleResponse != null) {
+        if(peopleResponse != null && peopleResponse.getResults() != null) {
             List<Person> lstPerson = PersonMapper.mapToPeople(peopleResponse);
             personRepository.saveAllAndFlush(lstPerson);
         }
@@ -74,11 +62,9 @@ public class StarWarsRepository {
                 StarshipsResponse.class
         );
 
-        if (starshipsResponse != null && starshipsResponse.getResults() != null) {
-            for (StarshipResponse starshipResponse : starshipsResponse.getResults()) {
-                Starship starship = new Starship();
-                starship.setName(starshipResponse.getName());
-            }
+        if(starshipsResponse != null && starshipsResponse.getResults() != null) {
+            List<Starship> lstStarships = StarshipMapper.mapToStarships(starshipsResponse);
+            starshipRepository.saveAllAndFlush(lstStarships);
         }
     }
 }

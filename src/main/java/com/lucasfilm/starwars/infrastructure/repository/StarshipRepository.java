@@ -1,6 +1,5 @@
 package com.lucasfilm.starwars.infrastructure.repository;
 
-import com.lucasfilm.starwars.domain.Film;
 import com.lucasfilm.starwars.domain.Starship;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

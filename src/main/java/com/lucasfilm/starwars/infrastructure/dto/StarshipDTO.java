@@ -1,8 +1,9 @@
-package com.lucasfilm.starwars.infrastructure.response;
+package com.lucasfilm.starwars.infrastructure.dto;
 
 import java.util.List;
 
-public class StarshipResponse {
+public class StarshipDTO {
+    private Long id;
     private String name;
     private String model;
     private String manufacturer;
@@ -21,6 +22,14 @@ public class StarshipResponse {
     private String created;
     private String edited;
     private String url;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

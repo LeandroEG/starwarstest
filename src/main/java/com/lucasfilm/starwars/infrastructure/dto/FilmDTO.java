@@ -1,48 +1,20 @@
-package com.lucasfilm.starwars.domain;
+package com.lucasfilm.starwars.infrastructure.dto;
 
-import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "films")
-public class Film {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class FilmDTO {
     private Long id;
-
     private String title;
     private int episodeId;
-    @Column(length = 5000)
     private String openingCrawl;
     private String director;
     private String producer;
     private String releaseDate;
-
-    @ElementCollection
-    @CollectionTable(name = "film_characters", joinColumns = @JoinColumn(name = "film_id"))
-    @Column(name = "character")
     private List<String> characters;
-
-    @ElementCollection
-    @CollectionTable(name = "film_planets", joinColumns = @JoinColumn(name = "film_id"))
-    @Column(name = "planet")
     private List<String> planets;
-
-    @ElementCollection
-    @CollectionTable(name = "film_starships", joinColumns = @JoinColumn(name = "film_id"))
-    @Column(name = "starship")
     private List<String> starships;
-
-    @ElementCollection
-    @CollectionTable(name = "film_vehicles", joinColumns = @JoinColumn(name = "film_id"))
-    @Column(name = "vehicle")
     private List<String> vehicles;
-
-    @ElementCollection
-    @CollectionTable(name = "film_species", joinColumns = @JoinColumn(name = "film_id"))
-    @Column(name = "species")
     private List<String> species;
-
     private String created;
     private String edited;
     private String url;
