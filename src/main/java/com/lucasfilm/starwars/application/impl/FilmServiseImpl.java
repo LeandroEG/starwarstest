@@ -21,4 +21,8 @@ public class FilmServiseImpl implements FilmService {
         return FilmMapper.mapToFilmDTOList(lstFilms);
     }
 
+    public List<Film> findByCharacterIdsContaining(String characterUrl) {
+       return filmRepository.findByCharacterIdsContaining(characterUrl);
+    }
+
 }

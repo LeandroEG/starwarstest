@@ -10,7 +10,6 @@ public interface PersonService {
 
     List<PersonDTO> getPeople();
 
-    Person getPersonById(int id);
+    PersonDTO getPersonByUrl(String url);
 
-    List<Person> getPeopleByFilm(String filmTitle);
 }

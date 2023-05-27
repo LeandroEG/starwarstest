@@ -5,38 +5,31 @@ import com.lucasfilm.starwars.domain.Person;
 import com.lucasfilm.starwars.infrastructure.dto.PersonDTO;
 import com.lucasfilm.starwars.infrastructure.mappers.PersonMapper;
 import com.lucasfilm.starwars.infrastructure.repository.PersonRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class PersonServiseImpl implements PersonService {
-    private final PersonRepository personRepository;
 
-    public PersonServiseImpl(PersonRepository personRepository) {
-        this.personRepository = personRepository;
-    }
+    @Autowired
+    public PersonRepository personRepository;
 
-    public List<Person> getPeopleWithFilmCountAndTitles() {
-        // Implementar la lógica para obtener las personas con el número de películas y los títulos
-        return null;
-    }
-
-    public Person getPersonWithMostFrequentStarship(List<String> selectedFilmTitles) {
-        // Implementar la lógica para obtener la persona que conduce la nave más veces en las películas seleccionadas
-        return null;
-    }
 
     public List<PersonDTO> getPeople() {
         List<Person> lstPerson = personRepository.findAll();
         return PersonMapper.mapToPersonDTOList(lstPerson);
     }
 
-    public Person getPersonById(int id){
-        return null;
-    }
-
-    public List<Person> getPeopleByFilm(String filmTitle){
-        return null;
+    public PersonDTO getPersonByUrl(String url) {
+        Optional<Person> optionalPerson = personRepository.findByUrl(url);
+        if (optionalPerson.isPresent()) {
+            return PersonMapper.mapToPersonDTO(optionalPerson.get());
+        } else {
+            throw new NoSuchElementException("No se ha encontrado ningún personaje: ");
+        }
     }
 }
