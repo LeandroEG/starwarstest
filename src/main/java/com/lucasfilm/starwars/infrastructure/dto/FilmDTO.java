@@ -1,7 +1,6 @@
 package com.lucasfilm.starwars.infrastructure.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 public class FilmDTO {

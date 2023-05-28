@@ -31,7 +31,11 @@ public class StarwarsServiceImpl implements StarwarsService  {
     public StarshipService starshipService;
 
 
-
+    /**
+     * Método que obtiene la lista de personajes junto con las peículas en las que aparece
+     * @return List
+     *         Lista de personajes con sus películas
+     */
     public List<PersonFilmsDTO> getPeopleWithFilmCountAndTitles() {
         List<PersonDTO> people = personService.getPeople();
         List<PersonFilmsDTO> personFilmsDTOList = new ArrayList<>();
@@ -56,10 +60,22 @@ public class StarwarsServiceImpl implements StarwarsService  {
         return personFilmsDTOList;
     }
 
+    /**
+     * Método que devuelve todas las películas
+     * @return List
+     *         Listado de todas las películas
+     */
     public List<FilmDTO> getFilms() {
         return filmService.getFilms();
     }
 
+    /**
+     * Método que devuelve el personaje que conduce la nave que más aparece en un listado de películas
+     * @param films
+     *        Listado de películas
+     * @return String
+     *         Nombre del personaje
+     */
     public String findMostFrequentStarshipPilot(List<FilmDTO> films) {
         Map<String, Integer> starshipPilotsCount = new HashMap<>();
 

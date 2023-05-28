@@ -11,6 +11,13 @@ import java.util.List;
 @Repository
 public interface FilmRepository extends JpaRepository<Film, Long> {
 
+    /**
+     * Método que devuelve la lista de películas de un personaje
+     * @param characterUrl
+     *        URL del personaje
+     * @return List
+     *         Lista de películas por personaje
+     */
     @Query("SELECT f FROM Film f WHERE :characterUrl MEMBER OF f.characters")
     List<Film> findByCharacterIdsContaining(@Param("characterUrl") String characterUrl);
 }

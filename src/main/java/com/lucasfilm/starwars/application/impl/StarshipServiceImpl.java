@@ -19,6 +19,14 @@ public class StarshipServiceImpl implements StarshipService {
 
     @Autowired
     public StarshipsMapper starshipsMapper;
+
+    /**
+     * Método que obtiene una nave a partir de su URL
+     * @param url
+     *        URL de la nave
+     * @return StarshipDTO
+     *         Objeto StarshipDTO
+     */
     @Override
     public StarshipDTO getStarshipByUrl(String url) {
         Optional<Starship> optionalStarship = starshipRepository.findByUrl(url);

@@ -45,6 +45,10 @@ public class StarWarsRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(StarWarsRepository.class);
 
+    /**
+     * Método principal al que se llama cuando arranca el servidor.
+     * Realiza las llamadas necesarias para la importación de los datos de la API de Star Wars
+     */
     public void importData() {
         logger.info("## START: COMIENZA PROCESO DE IMPORTACIÓN DE DATOS ##");
         importFilms();
@@ -53,6 +57,9 @@ public class StarWarsRepository {
         logger.info("## END: FINALIZADO PROCESO DE IMPORTACIÓN DE DATOS ##");
     }
 
+    /**
+     * Método que importa todas las películas de Star Wars
+     */
     private void importFilms() {
         List<Film> allFilms = new ArrayList<>();
         int page = 1;
@@ -71,6 +78,13 @@ public class StarWarsRepository {
         logger.info("##       -- Películas importadas correctamente.");
     }
 
+    /**
+     * Método que realizada la llamada a la API de Star Wars usando paginación para obtener las películas
+     * @param page
+     *        Número de página
+     * @return List
+     *         Listado de películas
+     */
     private List<Film> getFilmPage(int page) {
         try {
             ResponseEntity<FilmsResponse> response = restTemplate.exchange(
@@ -94,6 +108,9 @@ public class StarWarsRepository {
         return Collections.emptyList();
     }
 
+    /**
+     * Método que importa todos los personajes de Star Wars
+     */
     public void importPeople() {
         List<Person> allPeople = new ArrayList<>();
         int page = 1;
@@ -112,6 +129,13 @@ public class StarWarsRepository {
         logger.info("##       -- Personajes importados correctamente.");
     }
 
+    /**
+     * Método que realizada la llamada a la API de Star Wars usando paginación para obtener los personajes
+     * @param page
+     *        Número de página
+     * @return List
+     *         Listado de personajes
+     */
     private List<Person> getPeoplePage(int page) {
         try {
             ResponseEntity<PeopleResponse> response = restTemplate.exchange(
@@ -135,6 +159,9 @@ public class StarWarsRepository {
         return Collections.emptyList();
     }
 
+    /**
+     * Método que importa todas las naves de Star Wars
+     */
     private void importStarships() {
         List<Starship> allStarships = new ArrayList<>();
         int page = 1;
@@ -153,6 +180,13 @@ public class StarWarsRepository {
         logger.info("##       -- Naves importadas correctamente.");
     }
 
+    /**
+     * Método que realizada la llamada a la API de Star Wars usando paginación para obtener las naves
+     * @param page
+     *        Número de página
+     * @return List
+     *         Listado de personajes
+     */
     private List<Starship> getStarshipsPage(int page) {
         try {
             ResponseEntity<StarshipsResponse> response = restTemplate.exchange(

@@ -19,11 +19,23 @@ public class FilmServiseImpl implements FilmService {
     public FilmsMapper filmsMapper;
 
 
+    /**
+     * Método que devuelte la lista de todas las películas
+     * @return List
+     *         Listado de todas las películas
+     */
     public List<FilmDTO> getFilms() {
         List<Film> lstFilms = filmRepository.findAll();
         return filmsMapper.toDTOList(lstFilms);
     }
 
+    /**
+     * Método que devuelve la lista de películas de un personaje
+     * @param characterUrl
+     *        URL del personaje
+     * @return List
+     *         Lista de películas por personaje
+     */
     public List<Film> findByCharacterIdsContaining(String characterUrl) {
        return filmRepository.findByCharacterIdsContaining(characterUrl);
     }

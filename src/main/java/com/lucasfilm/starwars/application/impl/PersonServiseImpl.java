@@ -21,12 +21,23 @@ public class PersonServiseImpl implements PersonService {
     @Autowired
     public PeopleMapper peopleMapper;
 
-
+    /**
+     * Método que obtiene la lista de todos los personajes
+     * @return List
+     *         Listado de todos los personajes
+     */
     public List<PersonDTO> getPeople() {
         List<Person> lstPerson = personRepository.findAll();
         return peopleMapper.toDTOList(lstPerson);
     }
 
+    /**
+     * Método que obtiene un personajes a partir de su URL
+     * @param url
+     *        URL del personaje
+     * @return PersonDTO
+     *         Objeto personajeDTO
+     */
     public PersonDTO getPersonByUrl(String url) {
         Optional<Person> optionalPerson = personRepository.findByUrl(url);
         if (optionalPerson.isPresent()) {
