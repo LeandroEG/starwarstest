@@ -3,9 +3,9 @@ package com.lucasfilm.starwars.infrastructure.repository;
 import com.lucasfilm.starwars.domain.Film;
 import com.lucasfilm.starwars.domain.Person;
 import com.lucasfilm.starwars.domain.Starship;
-import com.lucasfilm.starwars.infrastructure.mappers.FilmMapper;
-import com.lucasfilm.starwars.infrastructure.mappers.PersonMapper;
-import com.lucasfilm.starwars.infrastructure.mappers.StarshipMapper;
+import com.lucasfilm.starwars.infrastructure.mappers.FilmsMapper;
+import com.lucasfilm.starwars.infrastructure.mappers.PeopleMapper;
+import com.lucasfilm.starwars.infrastructure.mappers.StarshipsMapper;
 import com.lucasfilm.starwars.infrastructure.response.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +31,17 @@ public class StarWarsRepository {
     public FilmRepository filmRepository;
     @Autowired
     public PersonRepository personRepository;
-
     @Autowired
     public StarshipRepository starshipRepository;
+
+    @Autowired
+    public FilmsMapper filmsMapper;
+
+    @Autowired
+    public PeopleMapper peopleMapper;
+
+    @Autowired
+    public StarshipsMapper starshipsMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(StarWarsRepository.class);
 
@@ -49,7 +57,7 @@ public class StarWarsRepository {
         List<Film> allFilms = new ArrayList<>();
         int page = 1;
         List<Film> currentPage;
-        logger.info("##       -- Importando películas .... ##");
+        logger.info("##       -- Importando películas ....");
         do {
             currentPage = getFilmPage(page);
             if (currentPage.isEmpty()) {
@@ -60,7 +68,7 @@ public class StarWarsRepository {
         } while (currentPage.size() > 0);
 
         filmRepository.saveAllAndFlush(allFilms);
-        logger.info("##       -- Películas importadas correctamente. ##");
+        logger.info("##       -- Películas importadas correctamente.");
     }
 
     private List<Film> getFilmPage(int page) {
@@ -74,7 +82,7 @@ public class StarWarsRepository {
             if (response.getStatusCode() == HttpStatus.OK) {
                 FilmsResponse fimlsResponse = response.getBody();
                 if (fimlsResponse != null) {
-                    return FilmMapper.mapToFilms(fimlsResponse);
+                    return filmsMapper.toEntityList(fimlsResponse.getResults());
                 }
             } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
                 return Collections.emptyList();
@@ -90,7 +98,7 @@ public class StarWarsRepository {
         List<Person> allPeople = new ArrayList<>();
         int page = 1;
         List<Person> currentPage;
-        logger.info("##       -- Importando personajes .... ##");
+        logger.info("##       -- Importando personajes ....");
         do {
             currentPage = getPeoplePage(page);
             if (currentPage.isEmpty()) {
@@ -101,7 +109,7 @@ public class StarWarsRepository {
         } while (currentPage.size() > 0);
 
         personRepository.saveAllAndFlush(allPeople);
-        logger.info("##       -- Personajes importados correctamente. ##");
+        logger.info("##       -- Personajes importados correctamente.");
     }
 
     private List<Person> getPeoplePage(int page) {
@@ -115,7 +123,7 @@ public class StarWarsRepository {
             if (response.getStatusCode() == HttpStatus.OK) {
                 PeopleResponse peopleResponse = response.getBody();
                 if (peopleResponse != null) {
-                    return PersonMapper.mapToPeople(peopleResponse);
+                    return peopleMapper.toEntityList(peopleResponse.getResults());
                 }
             } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
                 return Collections.emptyList();
@@ -131,7 +139,7 @@ public class StarWarsRepository {
         List<Starship> allStarships = new ArrayList<>();
         int page = 1;
         List<Starship> currentPage;
-        logger.info("##       -- Importando naves .... ##");
+        logger.info("##       -- Importando naves ....");
         do {
             currentPage = getStarshipsPage(page);
             if (currentPage.isEmpty()) {
@@ -142,7 +150,7 @@ public class StarWarsRepository {
         } while (currentPage.size() > 0);
 
         starshipRepository.saveAllAndFlush(allStarships);
-        logger.info("##       -- Naves importadas correctamente. ##");
+        logger.info("##       -- Naves importadas correctamente.");
     }
 
     private List<Starship> getStarshipsPage(int page) {
@@ -156,7 +164,7 @@ public class StarWarsRepository {
             if (response.getStatusCode() == HttpStatus.OK) {
                 StarshipsResponse starshipsResponse = response.getBody();
                 if (starshipsResponse != null) {
-                    return StarshipMapper.mapToStarships(starshipsResponse);
+                    return starshipsMapper.toEntityList(starshipsResponse.getResults());
                 }
             } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
                 return Collections.emptyList();

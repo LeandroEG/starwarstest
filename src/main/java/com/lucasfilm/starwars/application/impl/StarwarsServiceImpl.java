@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class StarwarsServiceImpl implements StarwarsService  {
 
+    private static final String TEXT_RESPONSE = "El personaje que conduce la nave que más veces aparece en la lista de películas es: ";
     @Autowired
     public PersonService personService;
     @Autowired
@@ -81,6 +82,6 @@ public class StarwarsServiceImpl implements StarwarsService  {
             }
         }
 
-        return mostFrequentPilot;
+        return TEXT_RESPONSE + mostFrequentPilot;
     }
 }
