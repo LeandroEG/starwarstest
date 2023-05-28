@@ -27,7 +27,7 @@ consulta sobre esos datos
 
 1. Clona el repositorio o descarga el código fuente.
 2. Abre el proyecto en tu entorno de desarrollo preferido.
-3. Configura la conexión a la base de datos en el archivo `application.properties`.
+3. Configura la conexión a la base de datos en el archivo `application.yaml`.
 4. Ejecuta la aplicación desde tu entorno de desarrollo o utiliza el comando `mvn spring-boot:run`.
 
 ## Uso
@@ -36,7 +36,7 @@ La aplicación se ejecuta como una aplicación de Spring Boot. Al arrancar, la a
 los personajes y las naves. Los datos se almacenan en la base de datos configurada.
 
 Una vez arrancado el servidor quedarán expuestos varios servicios.
-Para probar dichos servicios se puede utilizar:
+Para consumir dichos servicios se puede utilizar:
    - Postman para peticiones Rest
    - Swagger UI: Accediendo desde el navegador a la siguiente URL: http://localhost:8080/swagger-ui/index.html
 
