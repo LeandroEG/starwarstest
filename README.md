@@ -1,6 +1,6 @@
 # Star Wars API 
 
-Este proyecto es una aplicación que importa datos de la API de Star Wars (SWAPI) y los almacena en una base de datos. La aplicación se encarga de importar las películas, 
+Este proyecto es una aplicación que importa datos de la API de Star Wars (SWAPI) y los almacena en una base de datos relacional en memoria (H2). La aplicación se encarga de importar las películas, 
 los personajes y las naves de Star Wars utilizando llamadas a la API de SWAPI y mapeando los datos en entidades de la base de datos, realizando posteriormente diversas
 consulta sobre esos datos
 
