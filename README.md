@@ -40,21 +40,7 @@ Para probar dichos servicios se puede utilizar:
    - Postman para peticiones Rest
    - Swagger UI: Accediendo desde el navegador a la siguiente URL: http://localhost:8080/swagger-ui/index.html
 
-
-## Contribución
-
-Si deseas contribuir a este proyecto, sigue los pasos a continuación:
-
-1. Haz un fork del repositorio.
-2. Crea una nueva rama para tu función o corrección de errores: `git checkout -b feature/nueva-funcion` o `git checkout -b bugfix/correccion-error`.
-3. Realiza los cambios necesarios y realiza los commits: `git commit -m "Descripción del cambio"`.
-4. Envía tus cambios al repositorio remoto: `git push origin feature/nueva-funcion`.
-5. Abre una pull request en GitHub y describe los cambios propuestos.
-
 ## Autor
 
 Leandro Espinosa García
 
-## Licencia
-
-Este proyecto está bajo la Licencia [nombre de la licencia]. Consulta el archivo `LICENSE` para obtener más información.
