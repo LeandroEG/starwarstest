@@ -3,7 +3,6 @@ package com.lucasfilm.starwars.infrastructure.repository;
 import com.lucasfilm.starwars.domain.Film;
 import com.lucasfilm.starwars.domain.Person;
 import com.lucasfilm.starwars.domain.Starship;
-import com.lucasfilm.starwars.infrastructure.dto.PersonDTO;
 import com.lucasfilm.starwars.infrastructure.mappers.FilmMapper;
 import com.lucasfilm.starwars.infrastructure.mappers.PersonMapper;
 import com.lucasfilm.starwars.infrastructure.mappers.StarshipMapper;
@@ -39,52 +38,70 @@ public class StarWarsRepository {
     private static final Logger logger = LoggerFactory.getLogger(StarWarsRepository.class);
 
     public void importData() {
+        logger.info("## START: COMIENZA PROCESO DE IMPORTACIÓN DE DATOS ##");
         importFilms();
         importPeople();
         importStarships();
+        logger.info("## END: FINALIZADO PROCESO DE IMPORTACIÓN DE DATOS ##");
     }
 
     private void importFilms() {
-        FilmsResponse filmsResponse = restTemplate.getForObject(
-                STAR_WARS_BASE_URL + "/films/",
-                FilmsResponse.class
-        );
+        List<Film> allFilms = new ArrayList<>();
+        int page = 1;
+        List<Film> currentPage;
+        logger.info("##       -- Importando películas .... ##");
+        do {
+            currentPage = getFilmPage(page);
+            if (currentPage.isEmpty()) {
+                break;
+            }
+            allFilms.addAll(currentPage);
+            page++;
+        } while (currentPage.size() > 0);
 
-        if(filmsResponse !=null && filmsResponse.getResults() != null) {
-            List<Film> listFilms = FilmMapper.mapToFilms(filmsResponse);
-            filmRepository.saveAllAndFlush(listFilms);
-        }
+        filmRepository.saveAllAndFlush(allFilms);
+        logger.info("##       -- Películas importadas correctamente. ##");
     }
 
-    /*
-    private void importPeople() {
-        PeopleResponse peopleResponse = restTemplate.getForObject(
-                STAR_WARS_BASE_URL + "/people/",
-                PeopleResponse.class
-        );
-
-        if(peopleResponse != null && peopleResponse.getResults() != null) {
-            List<Person> lstPerson = PersonMapper.mapToPeople(peopleResponse);
-            personRepository.saveAllAndFlush(lstPerson);
+    private List<Film> getFilmPage(int page) {
+        try {
+            ResponseEntity<FilmsResponse> response = restTemplate.exchange(
+                    STAR_WARS_BASE_URL + "/films/?page=" + page,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<FilmsResponse>() {}
+            );
+            if (response.getStatusCode() == HttpStatus.OK) {
+                FilmsResponse fimlsResponse = response.getBody();
+                if (fimlsResponse != null) {
+                    return FilmMapper.mapToFilms(fimlsResponse);
+                }
+            } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return Collections.emptyList();
+            }
+        } catch (HttpClientErrorException exp) {
+            return Collections.emptyList();
         }
+
+        return Collections.emptyList();
     }
-    */
 
     public void importPeople() {
         List<Person> allPeople = new ArrayList<>();
         int page = 1;
         List<Person> currentPage;
-
+        logger.info("##       -- Importando personajes .... ##");
         do {
             currentPage = getPeoplePage(page);
             if (currentPage.isEmpty()) {
-                break;  // Salir del bucle si la página actual está vacía
+                break;
             }
             allPeople.addAll(currentPage);
             page++;
         } while (currentPage.size() > 0);
 
         personRepository.saveAllAndFlush(allPeople);
+        logger.info("##       -- Personajes importados correctamente. ##");
     }
 
     private List<Person> getPeoplePage(int page) {
@@ -96,9 +113,9 @@ public class StarWarsRepository {
                     new ParameterizedTypeReference<PeopleResponse>() {}
             );
             if (response.getStatusCode() == HttpStatus.OK) {
-                PeopleResponse swapiResponse = response.getBody();
-                if (swapiResponse != null) {
-                    return PersonMapper.mapToPeople(swapiResponse);
+                PeopleResponse peopleResponse = response.getBody();
+                if (peopleResponse != null) {
+                    return PersonMapper.mapToPeople(peopleResponse);
                 }
             } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
                 return Collections.emptyList();
@@ -111,14 +128,43 @@ public class StarWarsRepository {
     }
 
     private void importStarships() {
-        StarshipsResponse starshipsResponse = restTemplate.getForObject(
-                STAR_WARS_BASE_URL + "/starships/",
-                StarshipsResponse.class
-        );
+        List<Starship> allStarships = new ArrayList<>();
+        int page = 1;
+        List<Starship> currentPage;
+        logger.info("##       -- Importando naves .... ##");
+        do {
+            currentPage = getStarshipsPage(page);
+            if (currentPage.isEmpty()) {
+                break;
+            }
+            allStarships.addAll(currentPage);
+            page++;
+        } while (currentPage.size() > 0);
 
-        if(starshipsResponse != null && starshipsResponse.getResults() != null) {
-            List<Starship> lstStarships = StarshipMapper.mapToStarships(starshipsResponse);
-            starshipRepository.saveAllAndFlush(lstStarships);
+        starshipRepository.saveAllAndFlush(allStarships);
+        logger.info("##       -- Naves importadas correctamente. ##");
+    }
+
+    private List<Starship> getStarshipsPage(int page) {
+        try {
+            ResponseEntity<StarshipsResponse> response = restTemplate.exchange(
+                    STAR_WARS_BASE_URL + "/starships/?page=" + page,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<StarshipsResponse>() {}
+            );
+            if (response.getStatusCode() == HttpStatus.OK) {
+                StarshipsResponse starshipsResponse = response.getBody();
+                if (starshipsResponse != null) {
+                    return StarshipMapper.mapToStarships(starshipsResponse);
+                }
+            } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return Collections.emptyList();
+            }
+        } catch (HttpClientErrorException exp) {
+            return Collections.emptyList();
         }
+
+        return Collections.emptyList();
     }
 }

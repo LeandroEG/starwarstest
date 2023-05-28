@@ -5,7 +5,6 @@ import com.lucasfilm.starwars.infrastructure.dto.FilmDTO;
 import com.lucasfilm.starwars.infrastructure.dto.PersonFilmsDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +32,7 @@ public class StarwarsController {
     }
 
     @PostMapping("/characters/characters-drive-starship")
-    @ApiOperation("Método que devuelve todos los personajes con el nº de peliculas en las que aparece" +
-            " y el listado de sus títulos")
+    @ApiOperation("Método que devuelve el personaje que conduce la nave que más veces aparece en un listado de películas.")
     public String findMostFrequentStarshipPilot(@RequestBody List<FilmDTO> lstFilms) {
         return starwarsService.findMostFrequentStarshipPilot(lstFilms);
     }

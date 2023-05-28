@@ -72,7 +72,6 @@ public class StarwarsServiceImpl implements StarwarsService  {
             }
         }
 
-        // Find the pilot with the highest count
         String mostFrequentPilot = null;
         int maxCount = 0;
         for (Map.Entry<String, Integer> entry : starshipPilotsCount.entrySet()) {
