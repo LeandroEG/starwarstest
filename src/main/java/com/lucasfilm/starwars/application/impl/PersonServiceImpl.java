@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
-public class PersonServiseImpl implements PersonService {
+public class PersonServiceImpl implements PersonService {
 
     @Autowired
     public PersonRepository personRepository;

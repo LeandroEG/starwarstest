@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class FilmServiseImpl implements FilmService {
+public class FilmServiceImpl implements FilmService {
     @Autowired
     public FilmRepository filmRepository;
 

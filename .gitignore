@@ -35,6 +35,4 @@ out/
 
 ### VS Code ###
 .vscode/
-/src/main/generated/com/lucasfilm/starwars/infrastructure/mappers/PeopleMapperImpl.java
-/src/main/generated/com/lucasfilm/starwars/infrastructure/mappers/StarshipsMapperImpl.java
-/src/main/generated/com/lucasfilm/starwars/infrastructure/mappers/FilmsMapperImpl.java
+/src/main/generated/

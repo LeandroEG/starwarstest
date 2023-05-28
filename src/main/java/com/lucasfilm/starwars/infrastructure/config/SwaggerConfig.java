@@ -26,8 +26,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("API Documentation")
-                .description("API documentation for Star Wars project")
+                .title("API STAR WARS")
+                .description("Documentación de la API de STAR WARS")
                 .version("1.0.0")
                 .build();
     }
