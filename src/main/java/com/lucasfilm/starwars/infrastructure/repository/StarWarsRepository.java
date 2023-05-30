@@ -15,11 +15,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -61,19 +59,10 @@ public class StarWarsRepository {
      * Método que importa todas las películas de Star Wars
      */
     private void importFilms() {
+        String firstPage = STAR_WARS_BASE_URL + "/films/";
         List<Film> allFilms = new ArrayList<>();
-        int page = 1;
-        List<Film> currentPage;
         logger.info("##       -- Importando películas ....");
-        do {
-            currentPage = getFilmPage(page);
-            if (currentPage.isEmpty()) {
-                break;
-            }
-            allFilms.addAll(currentPage);
-            page++;
-        } while (currentPage.size() > 0);
-
+        getFilmPage(firstPage, allFilms);
         filmRepository.saveAllAndFlush(allFilms);
         logger.info("##       -- Películas importadas correctamente.");
     }
@@ -81,50 +70,36 @@ public class StarWarsRepository {
     /**
      * Método que realizada la llamada a la API de Star Wars usando paginación para obtener las películas
      * @param page
-     *        Número de página
-     * @return List
-     *         Listado de películas
+     *        URL de la siguiente página para obtener películas
+     * @param allFilms
+     *        Lista con todas las películas
      */
-    private List<Film> getFilmPage(int page) {
-        try {
-            ResponseEntity<FilmsResponse> response = restTemplate.exchange(
-                    STAR_WARS_BASE_URL + "/films/?page=" + page,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<FilmsResponse>() {}
-            );
-            if (response.getStatusCode() == HttpStatus.OK) {
-                FilmsResponse fimlsResponse = response.getBody();
-                if (fimlsResponse != null) {
-                    return filmsMapper.toEntityList(fimlsResponse.getResults());
+    private void getFilmPage(String page, List<Film> allFilms) {
+        ResponseEntity<FilmsResponse> response = restTemplate.exchange(
+                page,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<FilmsResponse>() {}
+        );
+        if (response.getStatusCode() == HttpStatus.OK) {
+            FilmsResponse filmsResponse = response.getBody();
+            if (filmsResponse != null) {
+                allFilms.addAll(filmsMapper.toEntityList(filmsResponse.getResults()));
+                if (filmsResponse.getNext() != null) {
+                    getFilmPage(filmsResponse.getNext(), allFilms);
                 }
-            } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-                return Collections.emptyList();
             }
-        } catch (HttpClientErrorException exp) {
-            return Collections.emptyList();
         }
-
-        return Collections.emptyList();
     }
 
     /**
      * Método que importa todos los personajes de Star Wars
      */
     public void importPeople() {
+        String firstPage = STAR_WARS_BASE_URL + "/people/";
         List<Person> allPeople = new ArrayList<>();
-        int page = 1;
-        List<Person> currentPage;
         logger.info("##       -- Importando personajes ....");
-        do {
-            currentPage = getPeoplePage(page);
-            if (currentPage.isEmpty()) {
-                break;
-            }
-            allPeople.addAll(currentPage);
-            page++;
-        } while (currentPage.size() > 0);
-
+        getPeoplePage(firstPage, allPeople);
         personRepository.saveAllAndFlush(allPeople);
         logger.info("##       -- Personajes importados correctamente.");
     }
@@ -132,50 +107,36 @@ public class StarWarsRepository {
     /**
      * Método que realizada la llamada a la API de Star Wars usando paginación para obtener los personajes
      * @param page
-     *        Número de página
-     * @return List
-     *         Listado de personajes
+     *        URL de la siguiente página para obtener personales
+     * @param allPeople
+     *        Lista con todos los personajes
      */
-    private List<Person> getPeoplePage(int page) {
-        try {
-            ResponseEntity<PeopleResponse> response = restTemplate.exchange(
-                    STAR_WARS_BASE_URL + "/people/?page=" + page,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<PeopleResponse>() {}
-            );
-            if (response.getStatusCode() == HttpStatus.OK) {
-                PeopleResponse peopleResponse = response.getBody();
-                if (peopleResponse != null) {
-                    return peopleMapper.toEntityList(peopleResponse.getResults());
+    private void getPeoplePage(String page, List<Person> allPeople) {
+        ResponseEntity<PeopleResponse> response = restTemplate.exchange(
+                page,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<PeopleResponse>() {}
+        );
+        if (response.getStatusCode() == HttpStatus.OK) {
+            PeopleResponse peopleResponse = response.getBody();
+            if (peopleResponse != null) {
+                allPeople.addAll(peopleMapper.toEntityList(peopleResponse.getResults()));
+                if (peopleResponse.getNext() != null) {
+                    getPeoplePage(peopleResponse.getNext(), allPeople);
                 }
-            } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-                return Collections.emptyList();
             }
-        } catch (HttpClientErrorException exp) {
-            return Collections.emptyList();
         }
-
-        return Collections.emptyList();
     }
 
     /**
      * Método que importa todas las naves de Star Wars
      */
     private void importStarships() {
+        String firstPage = STAR_WARS_BASE_URL + "/starships/";
         List<Starship> allStarships = new ArrayList<>();
-        int page = 1;
-        List<Starship> currentPage;
         logger.info("##       -- Importando naves ....");
-        do {
-            currentPage = getStarshipsPage(page);
-            if (currentPage.isEmpty()) {
-                break;
-            }
-            allStarships.addAll(currentPage);
-            page++;
-        } while (currentPage.size() > 0);
-
+        getStarshipsPage(firstPage, allStarships);
         starshipRepository.saveAllAndFlush(allStarships);
         logger.info("##       -- Naves importadas correctamente.");
     }
@@ -183,30 +144,25 @@ public class StarWarsRepository {
     /**
      * Método que realizada la llamada a la API de Star Wars usando paginación para obtener las naves
      * @param page
-     *        Número de página
-     * @return List
-     *         Listado de personajes
+     *        URL de la siguiente página para obtener naves
+     * @param allStarships
+     *        Lista con todas las naves
      */
-    private List<Starship> getStarshipsPage(int page) {
-        try {
-            ResponseEntity<StarshipsResponse> response = restTemplate.exchange(
-                    STAR_WARS_BASE_URL + "/starships/?page=" + page,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<StarshipsResponse>() {}
-            );
-            if (response.getStatusCode() == HttpStatus.OK) {
-                StarshipsResponse starshipsResponse = response.getBody();
-                if (starshipsResponse != null) {
-                    return starshipsMapper.toEntityList(starshipsResponse.getResults());
+    private void getStarshipsPage(String page,  List<Starship> allStarships) {
+        ResponseEntity<StarshipsResponse> response = restTemplate.exchange(
+                page,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<StarshipsResponse>() {}
+        );
+        if (response.getStatusCode() == HttpStatus.OK) {
+            StarshipsResponse starshipsResponse = response.getBody();
+            if (starshipsResponse != null) {
+                allStarships.addAll(starshipsMapper.toEntityList(starshipsResponse.getResults()));
+                if (starshipsResponse.getNext() != null) {
+                    getStarshipsPage(starshipsResponse.getNext(), allStarships);
                 }
-            } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
-                return Collections.emptyList();
             }
-        } catch (HttpClientErrorException exp) {
-            return Collections.emptyList();
         }
-
-        return Collections.emptyList();
     }
 }
