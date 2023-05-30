@@ -29,6 +29,7 @@ consulta sobre esos datos
 2. Abre el proyecto en tu entorno de desarrollo preferido.
 3. Configura la conexión a la base de datos en el archivo `application.yaml`.
 4. Ejecuta la aplicación desde tu entorno de desarrollo.
+5. Puede acceder a la consola de la base de datos desde la siguiente url: http://localhost:8080/h2-console/
 
 ## Uso
 
